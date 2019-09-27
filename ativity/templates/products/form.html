@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block conteudo %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+<form action="/ativity/product/create/" method="POST">
+    {% csrf_token %}
+    <h1>Novo Produto</h1>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Nome</span>
+        </div>
+        {{form.name}}
+        {{form.name.errors}}
+    </div>
+
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Valor</span>
+        </div>
+        {{form.value}}
+        {{form.value.errors}}
+    </div>
+
+    <div class="input-group mb-3">
+        <button type="submit" class="btn btn-primary">OK</button>
+    </div>
+</form>
+{% endblock %}

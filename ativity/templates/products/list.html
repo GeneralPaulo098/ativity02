@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<div class="">
+    <div class="row">
+        <div class="col-lg-3">
+            <form action="/ativity/product/" method="POST">
+                {% csrf_token %}
+                <select name="pesquisa" class="browser-default custom-select">
+                    <option selected>Options</option>
+                    <option value="cres">A-Z</option>
+                    <option value="decres">Z-A</option>
+                    <option value="maior">Maior</option>
+                    <option value="menor">Menor</option>
+                </select>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">OK</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">valor</th>
+            <th scope="col">ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.value}}</td>
+            <td><a href="/ativity/product/{{product.id}}">ver</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
