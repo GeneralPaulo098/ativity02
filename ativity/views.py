@@ -1,8 +1,11 @@
 from django.shortcuts import render,redirect
 from . models import Products
 from . forms import ProductsForm
+import json
 
 def home(request):
+    soma = request.session.get('soma', 1001)
+    request.session['soma'] = soma + 1
     return render(request,'home.html')
 
 def products_list(request):
@@ -25,6 +28,13 @@ def products_list(request):
     else:
         products = Products.objects.all()
         return render(request,'products/list.html',{'products':products})
+    
+def save_card(request,id):
+    product = Products.objects.get(pk=id)
+    list_card = request.session.get('card',[])
+    list_card.append(product.id)
+    request.session['card']= list_card
+    return redirect('/ativity/product/')
 
 def products_show(request,id):
     product = Products.objects.get(pk=id)
@@ -41,3 +51,4 @@ def product_create(request):
     else:
         form = ProductsForm()
         return render(request,'products/form.html',{'form':form})
+

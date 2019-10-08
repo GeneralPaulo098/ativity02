@@ -25,6 +25,7 @@
             <th scope="col">Nome</th>
             <th scope="col">valor</th>
             <th scope="col">ver</th>
+            <th scope="col">Compra</th>
         </tr>
     </thead>
     <tbody>
@@ -33,9 +34,11 @@
             <td>{{product.id}}</td>
             <td>{{product.name}}</td>
             <td>{{product.value}}</td>
-            <td><a href="/ativity/product/{{product.id}}">ver</a></td>
+            <td><button><a href="/ativity/product/{{product.id}}">ver</a></button></td>
+            <td><button><a href="/ativity/product/{{product.id}}/card/">comprar</a></button></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<h3>produtos no carrinho {{request.session.card| length}}</h3>
 {% endblock %}
