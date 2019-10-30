@@ -1,7 +1,11 @@
 from django.shortcuts import render,redirect
 from . models import Products
 from . forms import ProductsForm
-import json
+from . models import Shopping_Cart
+from . models import Clients
+from . models import Quantity
+from datetime import date
+
 
 def home(request):
     soma = request.session.get('soma', 1001)
@@ -35,6 +39,36 @@ def save_card(request,id):
     list_card.append(product.id)
     request.session['card']= list_card
     return redirect('/ativity/product/')
+   
+
+def cart(request):
+    e = request.session['card']
+    c = []
+    soma = 0
+    for i in e:
+        product = Products.objects.get(pk=i)
+        c.append(product)
+        soma = soma + product.value
+        
+    return render(request,'products/cart.html',{'c':c, 'soma':soma})
+
+def final(request):
+    e = request.session['card']
+    q = []
+    cliente = Clients.objects.get(pk=1)
+    data_atual = date.today()
+    card = Shopping_Cart.objects.create(client=cliente,date=data_atual)
+    Shopping_Cart.save(card)
+    for i in e:
+        product = Products.objects.get(pk=i)
+        quan = Quantity.objects.create(quantity=1,product=product,card=card)
+
+
+    
+    del request.session['card']
+
+    return redirect('/ativity/product/')
+        
 
 def products_show(request,id):
     product = Products.objects.get(pk=id)

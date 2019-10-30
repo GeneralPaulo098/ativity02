@@ -24,21 +24,20 @@
             <th scope="col">id</th>
             <th scope="col">Nome</th>
             <th scope="col">valor</th>
-            <th scope="col">ver</th>
-            <th scope="col">Compra</th>
         </tr>
     </thead>
     <tbody>
-        {% for product in products %}
+        {% for product in c%}
         <tr>
             <td>{{product.id}}</td>
             <td>{{product.name}}</td>
             <td>{{product.value}}</td>
-            <td><button><a href="/ativity/product/{{product.id}}">ver</a></button></td>
-            <td><button><a href="/ativity/product/{{product.id}}/card/">comprar</a></button></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<a href="/ativity/product/cart/" class="glyphicon glyphicon-shopping-cart">Carrinho:{{request.session.card| length}}</a>
+<div>
+    <h3>valor:{{soma}}</h3> 
+    <button><a href="/ativity/product/finalizar/">finalizar</a></button>
+</div>
 {% endblock %}
