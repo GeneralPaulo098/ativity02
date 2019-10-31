@@ -35,38 +35,58 @@ def products_list(request):
     
 def save_card(request,id):
     product = Products.objects.get(pk=id)
-    list_card = request.session.get('card',[])
-    list_card.append(product.id)
-    request.session['card']= list_card
+    list_cart = request.session.get('cart',[])
+    flag = False
+    for i in list_cart:
+        if product.id == int(i['id']):
+            dados = {
+                'id':product.id,
+                'quantidade':i['quantidade']+1
+                }
+            list_cart.remove(i)
+            list_cart.append(dados)
+            flag = True     
+    if flag == False:
+        dados={
+            'id':product.id,
+            'quantidade':1
+        }
+        list_cart.append(dados)
+
+    print(list_cart)
+    request.session['cart']= list_cart
     return redirect('/ativity/product/')
    
 
 def cart(request):
-    e = request.session['card']
-    c = []
+    e = request.session['cart']
     soma = 0
+    c = []
     for i in e:
-        product = Products.objects.get(pk=i)
-        c.append(product)
-        soma = soma + product.value
+        product = Products.objects.get(pk= int(i['id']))
+        v = product.value * int(i['quantidade'])
+        soma = soma + v
+        dados = {
+            'name': product.name,
+            'value': product.value,
+            'value_t': v,
+            'quantidade':i['quantidade']
+        }
+        c.append(dados)
         
     return render(request,'products/cart.html',{'c':c, 'soma':soma})
 
 def final(request):
-    e = request.session['card']
-    q = []
+    e = request.session['cart']
     cliente = Clients.objects.get(pk=1)
     data_atual = date.today()
-    card = Shopping_Cart.objects.create(client=cliente,date=data_atual)
-    Shopping_Cart.save(card)
+    cart = Shopping_Cart.objects.create(client=cliente,date=data_atual)
+    Shopping_Cart.save(cart)
     for i in e:
-        product = Products.objects.get(pk=i)
-        quan = Quantity.objects.create(quantity=1,product=product,card=card)
+        product = Products.objects.get(pk=int(i['id']))
+        quan = Quantity.objects.create(quantity=int(i['quantidade']),product=product,cart=cart)
 
-
-    
-    del request.session['card']
-
+    del request.session['cart']
     return redirect('/ativity/product/')
         
 
